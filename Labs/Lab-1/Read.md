@@ -60,4 +60,11 @@ S1(config-if)#
 
 ![](./4.jpeg)
 
-![PTK файл без erase](./Lab-1-no-erase.pkt)
+![PTK файл без erase enable password: class](./Lab-1-no-erase.pkt)
+
+### Инициализация и перезагрузка коммутатора
+
+Воспользуйтесь командой show flash, чтобы определить, были ли созданы сети VLAN на коммутаторе, после введите команду erase startup-config, чтобы удалить файл загрузочной конфигурации из NVRAM. 
+
+
+
