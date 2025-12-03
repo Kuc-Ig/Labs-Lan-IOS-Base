@@ -35,5 +35,7 @@ Switch(config)#interface range fastEthernet 0/1-24
 Switch(config-if-range)#shu
 Switch(config-if-range)#shutdown
 ```
+После чего убедиться что команда выполнена успешно:
+
 
 
