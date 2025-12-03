@@ -37,7 +37,7 @@ Switch(config-if-range)#shutdown
 ```
 После чего убедиться что команда выполнена успешно с помощью команды show running config (sh run):
 
-![](./Lab-1/image-2.jpeg)
+![](./image-2.jpeg)
 
 
 
