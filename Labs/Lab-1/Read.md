@@ -19,5 +19,5 @@
 
 В ходе лабораторной работы использовался коммутатор Cisco 2960 (ver ios 15.0(2)SE4)
 
-![] (https://github.com/Kuc-Ig/Labs-Lan-IOS-Base/blob/main/Labs/Lab-1/image-1.jpeg)
+![](https://github.com/Kuc-Ig/Labs-Lan-IOS-Base/blob/main/Labs/Lab-1/image-1.jpeg)
 
