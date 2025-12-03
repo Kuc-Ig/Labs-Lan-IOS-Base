@@ -21,3 +21,17 @@
 
 ![](https://github.com/Kuc-Ig/Labs-Lan-IOS-Base/blob/main/Labs/Lab-1/image-1.jpeg)
 
+При первом запуске необходимо отключить все интерфейсы коммутатора, для этого необходимо последовательно ввести следующие команды:
+
+```
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int
+Switch(config)#interface ran
+Switch(config)#interface range fas
+Switch(config)#interface range fastEthernet 0/0-24
+interface range not validated - command rejected
+Switch(config)#interface range fastEthernet 0/1-24
+Switch(config-if-range)#shu
+Switch(config-if-range)#shutdown ```
+
