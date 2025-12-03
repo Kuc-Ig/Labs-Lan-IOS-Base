@@ -33,5 +33,7 @@ Switch(config)#interface range fastEthernet 0/0-24
 interface range not validated - command rejected
 Switch(config)#interface range fastEthernet 0/1-24
 Switch(config-if-range)#shu
-Switch(config-if-range)#shutdown ```
+Switch(config-if-range)#shutdown
+```
+
 
