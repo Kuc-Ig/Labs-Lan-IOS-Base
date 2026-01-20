@@ -3,6 +3,21 @@
 ![](./2.png)
 
 
+| 						Устройство      |   Интерфейс     | 						IPv6-адрес     |   Link local IPv6-адрес     | 						Длина префикса      |   Шлюз по умолчанию     |
+| :---------------------|:---------------:|:---------------------|:---------------------------:|:--------------------------|:-----------------------:|
+| R1                    |G0/0/0           | 2001:db8:acad:a::1   |  fe80::1                    | 64                        |                         |
+|                       |G0/0/1           |   2001:db8:acad:1::1 |  fe80::1                    | 64                        |                         |
+|S1                  	  |VLAN1            |   2001:db8:acad:1::b |  fe80::b                    | 64                        |                         |
+|PC-A                   |NIC              |   2001:db8:acad:1::3 |  SLACC                      | 64                        |fe80::1                  |
+|PC-B                	  |NIC              |   2001:db8:acad:a::3 |  SLACC                      | 64                        | fe80::1                 |
+
+
+
+
+
+
+
+
 ### Задачи
 + Часть 1. Настройка топологии и конфигурация основных параметров маршрутизатора и коммутатора
 + Часть 2. Ручная настройка IPv6-адресов
@@ -60,8 +75,75 @@ S1#
 На обоих утсройсвах необходимо задать пароль и настроить ssh доступ:
 
 ```
-dddd
+no ip domain-lookup
+banner motd ^C!!!!!!!Lab!!!!!!!^C
+no ip domain-lookup
+enable secret class
+username cisco secret class
+line con 0
+ logging synchronous
+exit
+line vty 0 4
+ login local
+ transport input telnet
+exit
+line vty 5 15
+ login local
+ transport input telnet
+exit
+
 ```
+![](./3.png)
+
+Далее необходимо назначить ipv6 адреса обоим интерфейсам на R1, 
+
+```
+R1(config)#int
+R1(config)#interface giga
+R1(config)#interface gigabitEthernet 0/0/0
+R1(config-if)#ip
+R1(config-if)#ipv
+R1(config-if)#ipv6 add
+R1(config-if)#ipv6 address 2001:db8:acad:a::1/64
+R1(config-if)#exit
+R1(config)#int giga 0/0/1
+R1(config-if)#ipv
+R1(config-if)#ipv6 add
+R1(config-if)#ipv6 address 2001:db8:acad:1::1/64
+R1(config-if)#exit
+R1(config)#int
+R1(config)#interface gig
+R1(config)#interface gigabitEthernet 0/0/0
+R1(config-if)#no shu
+R1(config-if)#no shutdown 
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to up
+
+R1(config-if)#exit
+R1(config)#int
+R1(config)#interface gig
+R1(config)#interface gigabitEthernet 0/0/1
+R1(config-if)#no shut
+R1(config-if)#no shutdown 
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up
+
+```
+Если после назначения адресов на интерфейсы вывести список ip то можно заметить что помимо глобальных адресов ipv6 были автоматически назначены и link local ipv6 с помощью команды 
+show ipv6 interface brief:
+
+![](./4.png)
+
+
+
+
+
 
 
 ### Необходимые ресурсы
