@@ -217,7 +217,7 @@ R1(config)#
 ![](./8.png)
 
 
-
+![PTK файл enable password: class](./lab-4.pkt)
 
 
 
