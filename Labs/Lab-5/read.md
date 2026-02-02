@@ -161,3 +161,5 @@ wr mem
 
 ![](./4.png)
 
+![PTK файл enable password: class](./ssh.pkt)
+
