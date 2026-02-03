@@ -131,3 +131,82 @@ security password min-length 14
 exit
 wr mem
 ```
+Далее необходимо назначить VLAN на коммутаторы S1 и S2 согласно таблице.
+Рассмотрим пример создания VLAN на примере S1, настройка на коммутаторе S2 производится аналогично:
+
+```
+S1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#vlan 10
+S1(config-vlan)#na
+S1(config-vlan)#name vlan-10
+S1(config-vlan)#exit
+S1(config)#interface fastEthernet 0/1
+S1(config-if)#swi
+S1(config-if)#switchport acc
+S1(config-if)#switchport mod
+S1(config-if)#switchport mode acc
+S1(config-if)#switchport mode access ?
+  <cr>
+S1(config-if)#switchport mode access 
+S1(config-if)#swi
+S1(config-if)#switchport acc
+S1(config-if)#switchport access vl
+S1(config-if)#switchport access vlan 10
+S1(config-if)#
+```
+Убедимся что vlan назначен на нужный порт
+
+![](./2.png)
+
+Далее по аналогии назначаем соответствующие vlan на интерфейсы коммутатора согласно таблице:
+
+```
+S1(config-if)#exit
+S1(config)#vlan 20
+S1(config-vlan)#na
+S1(config-vlan)#name vlan-20
+S1(config-vlan)#exit
+S1(config)#int fa0/6
+S1(config-if)#switchport mode access
+S1(config-if)#switchport access vlan 20
+S1(config-if)#exit
+S1(config)#int
+S1(config)#interface ra
+S1(config)#interface range fa
+S1(config)#interface range fastEthernet 0/2-5
+S1(config-if-range)#swi
+S1(config-if-range)#switchport mo
+S1(config-if-range)#switchport mode acc
+S1(config-if-range)#switchport mode access 
+S1(config-if-range)#swi
+S1(config-if-range)#switchport 
+%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/1 (10), with S1 FastEthernet0/1 (1).
+acc
+S1(config-if-range)#switchport access vla
+S1(config-if-range)#switchport access vlan 999
+S1(config-if-range)#
+S1(config-if-range)#exit
+S1(config)#int
+S1(config)#interface ra
+S1(config)#interface range gig
+S1(config)#interface range gigabitEthernet 0/1-2
+S1(config-if-range)#swi
+S1(config-if-range)#switchport mo
+S1(config-if-range)#switchport mode acc
+S1(config-if-range)#switchport mode access 
+%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/1 (10), with S1 FastEthernet0/1 (1).
+
+S1(config-if-range)#swi
+S1(config-if-range)#switchport acc
+S1(config-if-range)#switchport access vla
+S1(config-if-range)#switchport access vlan 999
+S1(config-if-range)#
+```
+Проверяем таблицу VLAN
+
+![](./3.png)
+
+После чего назначаем ip адреса на интерфейсы
+
+
