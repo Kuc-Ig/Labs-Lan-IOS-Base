@@ -239,11 +239,7 @@ S1(config-if)#switchport mode trunk
   ![](./10.png)
 
 
-
-
-
-
-![](./5.png)
+![PTK файл enable password: class](./vlan.pkt)
 
 
 
