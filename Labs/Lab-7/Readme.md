@@ -251,206 +251,101 @@ S3: fa0/3.
 Ответ:
 Потому что на каждом этапе сравнения он оказался "хуже" своего соседа.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Сам перечень набора команд для S1:
+Изменим стоимость порта на коммутаторе S1:
 
 ```
-en
-conf t
-hostname S1
-banner motd ^The device is the property of the company, any unauthorized change to the configuration is punishable by law.^
-ip domain-name otus.ru
-no ip domain-lookup
-enable secret class
-username cisco secret class
-service password-encryption 
-crypto key generate rsa 
-2048
-ip ssh version 2
-username admin privilege 15 secret Adm1nP@55
-line vty 0
-logging synchronous
-exit
-line vty 0 4 
-login local
-transport input ssh
-exit
-line vty 5 15
-login local
-transport input ssh
-exit
-security password min-length 14
-exit
-wr mem
-```
-
-Сам перечень набора команд для S2:
-
-```
-en
-conf t
-hostname S1
-banner motd ^The device is the property of the company, any unauthorized change to the configuration is punishable by law.^
-ip domain-name otus.ru
-no ip domain-lookup
-enable secret class
-username cisco secret class
-service password-encryption 
-crypto key generate rsa 
-2048
-ip ssh version 2
-username admin privilege 15 secret Adm1nP@55
-line vty 0
-logging synchronous
-exit
-line vty 0 4 
-login local
-transport input ssh
-exit
-line vty 5 15
-login local
-transport input ssh
-exit
-security password min-length 14
-exit
-wr mem
-```
-Далее необходимо назначить VLAN на коммутаторы S1 и S2 согласно таблице.
-Рассмотрим пример создания VLAN на примере S1, настройка на коммутаторе S2 производится аналогично:
-
-```
+S1>en
+Password: 
 S1#conf t
 Enter configuration commands, one per line.  End with CNTL/Z.
-S1(config)#vlan 10
-S1(config-vlan)#na
-S1(config-vlan)#name vlan-10
-S1(config-vlan)#exit
-S1(config)#interface fastEthernet 0/1
-S1(config-if)#swi
-S1(config-if)#switchport acc
-S1(config-if)#switchport mod
-S1(config-if)#switchport mode acc
-S1(config-if)#switchport mode access ?
-  <cr>
-S1(config-if)#switchport mode access 
-S1(config-if)#swi
-S1(config-if)#switchport acc
-S1(config-if)#switchport access vl
-S1(config-if)#switchport access vlan 10
-S1(config-if)#
-```
-Убедимся что vlan назначен на нужный порт
-
-![](./2.png)
-
-Далее по аналогии назначаем соответствующие vlan на интерфейсы коммутатора согласно таблице:
-
-```
-S1(config-if)#exit
-S1(config)#vlan 20
-S1(config-vlan)#na
-S1(config-vlan)#name vlan-20
-S1(config-vlan)#exit
-S1(config)#int fa0/6
-S1(config-if)#switchport mode access
-S1(config-if)#switchport access vlan 20
-S1(config-if)#exit
 S1(config)#int
-S1(config)#interface ra
-S1(config)#interface range fa
-S1(config)#interface range fastEthernet 0/2-5
-S1(config-if-range)#swi
-S1(config-if-range)#switchport mo
-S1(config-if-range)#switchport mode acc
-S1(config-if-range)#switchport mode access 
-S1(config-if-range)#swi
-S1(config-if-range)#switchport 
-%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/1 (10), with S1 FastEthernet0/1 (1).
-acc
-S1(config-if-range)#switchport access vla
-S1(config-if-range)#switchport access vlan 999
-S1(config-if-range)#
-S1(config-if-range)#exit
-S1(config)#int
-S1(config)#interface ra
-S1(config)#interface range gig
-S1(config)#interface range gigabitEthernet 0/1-2
-S1(config-if-range)#swi
-S1(config-if-range)#switchport mo
-S1(config-if-range)#switchport mode acc
-S1(config-if-range)#switchport mode access 
-%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on FastEthernet0/1 (10), with S1 FastEthernet0/1 (1).
+S1(config)#interface fa
+S1(config)#interface fastEthernet 0/2
+S1(config-if)#spanning-tree vlan 1 cost 10
+S1(config-if)#end
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
 
-S1(config-if-range)#swi
-S1(config-if-range)#switchport acc
-S1(config-if-range)#switchport access vla
-S1(config-if-range)#switchport access vlan 999
-S1(config-if-range)#
+S1#
+S1#ping 192.168.1.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.2, timeout is 2 seconds:
+.....
+Success rate is 0 percent (0/5)
+
+S1#ping 192.168.1.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.2, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/0 ms
+
+S1#sh
+S1#show sp
+S1#show spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.C728.95DB
+             Cost        10
+             Port        2(FastEthernet0/2)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0003.E4B0.46C0
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/1            Altn BLK 19        128.1    P2p
+Fa0/2            Root FWD 10        128.2    P2p
+Fa0/3            Desg FWD 19        128.3    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+
+S1#
 ```
-Проверяем таблицу VLAN
 
-![](./3.png)
-
-После чего необходимо задать режим trunk для магистральных портов коммутатора:
-```
-S1(config-if)#switchport trunk native vlan 999
-S1(config-if)#switchport trunk allowed vlan 10,20,30,999
-S1(config-if)#switchport mode trunk
-```
-таким образом между коммутаторами разрешаем прохождения трафика для соответствующих Vlan
-Проверим транки:
-
-![](./4.png)
-
-Так, у нас похоже ошибка, между интерфейсом fa0/1 и fa0/5 нет транка vlan 10,20,30,999, так же нет нативного влана на fa0/5.
-После просмотра конфига, оказалось что отсутсвует vlan 30 на S1. Конечные настройки на S1 выглядят так:
-
-![](./5.png)
 ![](./6.png)
 
+Удалим внесенное значение и понаблюдаем изменения:
+```
+S1(config)#int
+S1(config)#interface fas
+S1(config)#interface fastEthernet 0/2
+S1(config-if)#no spanning-tree vlan 1 cost 10
+S1(config-if)#end
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
 
-Аналогично проводим настройки согласно таблице и для коммутатора S2.
-Результат должен быть аналогичный:
+S1#sh
+S1#show sp
+S1#show spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.C728.95DB
+             Cost        19
+             Port        1(FastEthernet0/1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0003.E4B0.46C0
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/1            Root FWD 19        128.1    P2p
+Fa0/2            Altn BLK 19        128.2    P2p
+Fa0/3            Desg FWD 19        128.3    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+
+S1#
+```
 ![](./7.png)
-После чего создаем подынтерфейсы на маршрутизаторе c 10,20,30,999 на каждом интерфейсе прописываем инкапсуляцию на соответсвующие vlan 10,20,30 и 999, так же не забываем прописывать ip address на каждом из них согласно таблице, конечные настройки будут выглядеть следующим образом:
-![](./8.png)
- После проверяем доступность до PC-A и PC-B%
 
- ![](./9.png)
 
- Проверяем сетевую связанность со всеми сетевыми устройствами с РС-А и РС-В:
 
-  ![](./10.png)
 
