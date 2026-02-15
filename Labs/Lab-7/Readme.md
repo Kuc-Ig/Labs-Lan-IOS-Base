@@ -92,6 +92,179 @@ S2(config-if-range)#shutdown
 ```
 ![](./3.png)
 
+Далее необходимо назначить используемые порты в качестве транковых:
+
+```
+S1(config)#int
+S1(config)#interface fas
+S1(config)#interface ran
+S1(config)#interface range fa
+S1(config)#interface range fastEthernet 0/3-4
+S1(config-if-range)#?
+  authentication    Auth Manager Interface Configuration Commands
+  cdp               Global CDP configuration subcommands
+  channel-group     Etherchannel/port bundling configuration
+  channel-protocol  Select the channel protocol (LACP, PAgP)
+  description       Interface specific description
+  dot1x             Interface Config Commands for IEEE 802.1X
+  duplex            Configure duplex operation.
+  exit              Exit from interface configuration mode
+  ip                Interface Internet Protocol config commands
+  lldp              LLDP interface subcommands
+  mdix              Set Media Dependent Interface with Crossover
+  mls               mls interface commands
+  no                Negate a command or set its defaults
+  shutdown          Shutdown the selected interface
+  spanning-tree     Spanning Tree Subsystem
+  speed             Configure speed operation.
+  storm-control     storm configuration
+  switchport        Set switching mode characteristics
+  tx-ring-limit     Configure PA level transmit ring limit
+S1(config-if-range)#
+S1(config-if-range)#swi
+S1(config-if-range)#switchport mo
+S1(config-if-range)#switchport mode tru
+S1(config-if-range)#switchport mode trunk 
+S1(config-if-range)#end
+```
+Далее необходимо включить порты F2 и F4 на всех коммутаторах:
+
+```
+S1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#int
+S1(config)#interface fads
+S1(config)#interface fas
+S1(config)#interface fastEthernet 0/4
+S1(config-if)#no shu
+S1(config-if)#no shutdown 
+
+%LINK-5-CHANGED: Interface FastEthernet0/4, changed state to down
+S1(config-if)#exit
+S1(config)#interface fastEthernet 0/2
+S1(config-if)#no shu
+S1(config-if)#no shutdown 
+
+%LINK-5-CHANGED: Interface FastEthernet0/2, changed state to down
+S1(config-if)#exit
+S1(config)#
+```
+После чего проверить данные протокола spanning-tree каждого коммутатора:
+
+![](./4.png)
+
+```
+S1#show spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.C728.95DB
+             Cost        19
+             Port        1(FastEthernet0/1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0003.E4B0.46C0
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/1            Root FWD 19        128.1    P2p
+Fa0/2            Altn BLK 19        128.2    P2p
+Fa0/3            Desg FWD 19        128.3    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+```
+```
+S3#show sp
+S3#show spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.C728.95DB
+             Cost        19
+             Port        1(FastEthernet0/1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     000A.41B9.8B78
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/1            Root FWD 19        128.1    P2p
+Fa0/2            Altn BLK 19        128.2    P2p
+Fa0/3            Altn BLK 19        128.3    P2p
+Fa0/4            Altn BLK 19        128.4    P2p
+
+```
+```
+S2#show sp
+S2#show spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    32769
+             Address     0001.C728.95DB
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    32769  (priority 32768 sys-id-ext 1)
+             Address     0001.C728.95DB
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/2            Desg FWD 19        128.2    P2p
+Fa0/3            Desg FWD 19        128.3    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+
+```
+Как видно корневым коммутатором является S2
+
+![](./5.png)
+
+С учетом выходных данных, поступающих с коммутаторов, ответьте на следующие вопросы.
+Какой коммутатор является корневым мостом? 
+Ответ:
+S2
+
+Почему этот коммутатор был выбран протоколом spanning-tree в качестве корневого моста?
+Ответ:
+Потому что у него наименьшее значение идентификатора моста (BID) 
+Какие порты на коммутаторе являются корневыми портами? 
+Ответ:
+S1-Fast 0/1, S3-fast 0/1
+Какие порты на коммутаторе являются назначенными портами? 
+Ответ:
+В качестве действующего 
+S1:fa0/1
+S2:fa0/4
+Какой порт отображается в качестве альтернативного и в настоящее время заблокирован? 
+Ответ:
+Да.
+S1: fa0/3, fa0/4,fa0/2
+S3: fa0/3.
+Почему протокол spanning-tree выбрал этот порт в качестве невыделенного (заблокированного) порта?
+Ответ:
+Потому что на каждом этапе сравнения он оказался "хуже" своего соседа.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
