@@ -131,7 +131,7 @@ security password min-length 14
 exit
 wr mem
 ```
-
+![PTK файл enable password: class](./stp.pkt)
 
 
 
