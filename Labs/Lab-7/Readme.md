@@ -131,6 +131,49 @@ security password min-length 14
 exit
 wr mem
 ```
+Далее необходимо проверить работоспособность сетевой связанности со всеми узлами
+Эхо-запрос от коммутатора S1 на коммутатор S3?
+![](./2.png)
+
+Эхо-запрос от коммутатора S1 на коммутатор S2?
+
+Эхо-запрос от коммутатора S2 на коммутатор S3?
+
+Далее на каждом коммутаторе необходимо отключить интерфейсы.
+Ниже приведен примеер на коммутаторе S1:
+```
+S1# conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#int ran
+S1(config)#int range fa
+S1(config)#int range fastEthernet 0/1-24
+S1(config-if-range)#shut
+S1(config-if-range)#shutdown 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ![PTK файл enable password: class](./stp.pkt)
 
 
