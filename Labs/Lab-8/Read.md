@@ -604,6 +604,41 @@ Building configuration...
 R2(config)#
 ```
 
+Для сетевой связанности нужно добавить маршрут на R1 по умолчанию на соседний маршрутизатор R2:
+
+```
+R1>
+R1>
+R1>en
+Password: 
+R1#ip ro
+R1#ip route
+R1#ip route 0.0.0.0 0.0.0.0 10.0.0.2
+      ^
+% Invalid input detected at '^' marker.
+	
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#ip rou
+R1(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.2
+R1(config)#do ping 192.168.1.97
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.97, timeout is 2 seconds:
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/0 ms
+
+R1(config)#
+```
+
+
+
+
+
+
+
+
+
 
 =================
 
