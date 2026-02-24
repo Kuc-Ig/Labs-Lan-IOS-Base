@@ -24,10 +24,9 @@
 
 ### Задачи
 + Часть 1. Создание сети и настройка основных параметров устройства
-+ Часть 2. Создание сетей VLAN и назначение портов коммутатора
-+ Часть 3. Настройка транка 802.1Q между коммутаторами.
-+ Часть 4. Настройка маршрутизации между сетями VLAN
-+ Часть 5. Проверка, что маршрутизация между VLAN работает
++ Часть 2. Настройка и проверка двух серверов DHCPv4 на R1
++ Часть 3. Настройка и проверка DHCP-ретрансляции на R2
+
 
 ### При первом подключении к устройствам, необходимо провести первоначальную настройку:
 
@@ -42,6 +41,38 @@
 en
 conf t
 hostname R1
+banner motd ^The device is the property of the company, any unauthorized change to the configuration is punishable by law.^
+ip domain-name otus.ru
+no ip domain-lookup
+enable secret class
+username cisco secret class
+service password-encryption 
+crypto key generate rsa 
+2048
+ip ssh version 2
+username admin privilege 15 secret Adm1nP@55
+line vty 0
+logging synchronous
+exit
+line vty 0 4 
+login local
+transport input ssh
+exit
+line vty 5 15
+login local
+transport input ssh
+exit
+security password min-length 14
+exit
+wr mem
+```
+
+Сам перечень набора команд для R2:
+
+```
+en
+conf t
+hostname R2
 banner motd ^The device is the property of the company, any unauthorized change to the configuration is punishable by law.^
 ip domain-name otus.ru
 no ip domain-lookup
@@ -105,7 +136,7 @@ wr mem
 ```
 en
 conf t
-hostname S1
+hostname S2
 banner motd ^The device is the property of the company, any unauthorized change to the configuration is punishable by law.^
 ip domain-name otus.ru
 no ip domain-lookup
@@ -131,5 +162,11 @@ security password min-length 14
 exit
 wr mem
 ```
+
+Согласно таблице необходимо 
+
+
+
+
 ![PTK файл enable password: class](./stp.pkt)
 
