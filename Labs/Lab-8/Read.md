@@ -632,7 +632,95 @@ R1(config)#
 ```
 
 
+Согласно схеме на коммутаторе S1 порт 6 соединен с РСА, настроим соответсвующий VLAN:
 
+```
+S1>
+S1>
+S1>
+S1>en
+Password: 
+S1#conf
+S1#configure in
+S1#configure int
+S1#configure t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#int
+S1(config)#interface fa
+S1(config)#interface fastEthernet 0/6
+S1(config-if)#swi
+S1(config-if)#switchport m
+S1(config-if)#switchport mode acc
+S1(config-if)#switchport mode access 
+S1(config-if)#swi
+S1(config-if)#switchport acc
+S1(config-if)#switchport access vl
+S1(config-if)#switchport access vlan 100
+S1(config-if)#do sh vlan br
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/5
+100  CLIENTS                          active    Fa0/6
+200  MGM                              active    
+999  Parking-Lot                      active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/1, Gig0/2
+1000 Native                           active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
+А на порту 5 настроим нативный влан 1000 и транк на вланы 100 200 и 1000 соответсвенно:
+
+```
+S1(config)#
+S1(config)#
+S1(config)#
+S1(config)#int
+S1(config)#interface fa
+S1(config)#interface fastEthernet 0/5
+S1(config-if)#swi
+S1(config-if)#switchport m
+S1(config-if)#switchport mode tr
+S1(config-if)#switchport mode trunk 
+
+S1(config-if)#
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/5, changed state to down
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/5, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan200, changed state to up
+
+S1(config-if)#sw
+S1(config-if)#switchport tr
+S1(config-if)#switchport trunk na
+S1(config-if)#switchport trunk native vl
+S1(config-if)#switchport trunk native vlan 1000
+S1(config-if)#swi
+S1(config-if)#switchport tr
+S1(config-if)#switchport trunk all
+S1(config-if)#switchport trunk allowed vl
+S1(config-if)#switchport trunk allowed vlan 100,200,1000
+S1(config-if)#do sh int trunk
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/5       on           802.1q         trunking      1000
+
+Port        Vlans allowed on trunk
+Fa0/5       100,200,1000
+
+Port        Vlans allowed and active in management domain
+Fa0/5       100,200,1000
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/5       none
+
+S1(config-if)#
+```
 
 
 
