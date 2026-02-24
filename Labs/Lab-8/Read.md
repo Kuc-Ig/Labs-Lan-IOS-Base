@@ -801,7 +801,7 @@ R1(dhcp-config)#
 
 ![](./4.png)
 
-
+Согласно справки команда  "helper-address"  служит для указания адреса назначения для широковещательных UDP-запросов.
 
 ```
 R2>
@@ -866,152 +866,28 @@ R2#do wr mem
 R2#
 
 ```
+Проверяем сетевую связанность от РС-В с РС-А:
 
+![](./5.png)
 
+Проверяем статистику DHCP на R1:
 
-=================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Согласно таблице необходимо создать сети и настроить основные параметры устройства:
-
-
-
-
-
-
-
-### Для R1:
 ```
-R1#
-R1#
-R1#
-R1#conf t
-Enter configuration commands, one per line.  End with CNTL/Z.
-R1(config)#int
-R1(config)#interface gigi
-R1(config)#interface giga
-R1(config)#interface gigabitEthernet 0/0/0
-R1(config-if)#ip add
-R1(config-if)#ip address 10.0.0.1 255.255.255.252
-R1(config-if)#no shu
-R1(config-if)#no shutdown 
-
-R1(config-if)#
-%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up
-
-R1(config-if)#exit
-R1(config)#int
-R1(config)#interface gi
-R1(config)#interface gigabitEthernet 0/0/1
-R1(config-if)#no shu
-R1(config-if)#no shutdown 
-
-R1(config-if)#
-%LINK-5-CHANGED: Interface GigabitEthernet0/0/1, changed state to up
-
-%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up
-
-R1(config-if)#exit
-R1(config)#nt
-R1(config)#int
-R1(config)#interface gi
-R1(config)#interface gigabitEthernet 0/0/1.100
-R1(config-subif)#
-%LINK-5-CHANGED: Interface GigabitEthernet0/0/1.100, changed state to up
-
-%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.100, changed state to up
-
-R1(config-subif)#en
-R1(config-subif)#encapsulation do
-R1(config-subif)#encapsulation dot1Q 100
-R1(config-subif)#ip add
-R1(config-subif)#ip address 192.168.1.1 255.255.255.0
-R1(config-subif)#des
-R1(config-subif)#description CLIENTS
-R1(config-subif)#
-R1(config-subif)#exit
-R1(config)#int
-R1(config)#interface giga
-R1(config)#interface gigabitEthernet 0/0/1.200
-R1(config-subif)#
-%LINK-5-CHANGED: Interface GigabitEthernet0/0/1.200, changed state to up
-
-%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.200, changed state to up
-
-R1(config-subif)#en
-R1(config-subif)#encapsulation do
-R1(config-subif)#encapsulation dot1Q 200
-R1(config-subif)#ip add
-R1(config-subif)#ip address 192.168.2.1 255.255.255.0
-R1(config-subif)#des
-R1(config-subif)#description MANAGEMENT(MGM)
-R1(config-subif)#exit
-R1(config)#int
-R1(config)#interface giga
-R1(config)#interface gigabitEthernet 0/0/1.1000
-R1(config-subif)#
-%LINK-5-CHANGED: Interface GigabitEthernet0/0/1.1000, changed state to up
-
-%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1.1000, changed state to up
-
-R1(config-subif)#en
-R1(config-subif)#encapsulation do
-R1(config-subif)#encapsulation dot1Q 1000 ?
-  native  Make this as native vlan
-  <cr>
-R1(config-subif)#encapsulation dot1Q 1000 na
-R1(config-subif)#encapsulation dot1Q 1000 native 
-R1(config-subif)#des
-R1(config-subif)#description NATIVE
-R1(config-subif)#ip add
-R1(config-subif)#ip address 192.168.3.1 255.255.255.252
-R1(config-subif)#end
-R1#
-%SYS-5-CONFIG_I: Configured from console by console
-
+R1#sh
+R1#show ip dh
+R1#show ip dhcp ?
+  binding   DHCP address bindings
+  conflict  DHCP address conflicts
+  pool      DHCP pools information
+  relay     Miscellaneous DHCP relay information
+R1#show ip dhcp bi
+R1#show ip dhcp binding 
+IP address       Client-ID/              Lease expiration        Type
+                 Hardware address
+192.168.1.6      0004.9A41.5EC3           --                     Automatic
+192.168.1.102    00E0.B051.0E1E           --                     Automatic
 R1#
 ```
 
-
-
-
-
-
-
-![PTK файл enable password: class](./stp.pkt)
+![PTK файл enable password: class](./DHCPPv4.pkt)
 
