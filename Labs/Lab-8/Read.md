@@ -722,9 +722,150 @@ Fa0/5       none
 S1(config-if)#
 ```
 
+настроим DHCP
+
+```
+R1>en
+Password: 
+R1#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#ip dh
+R1(config)#ip dhcp ex
+R1(config)#ip dhcp excluded-address 192.168.1.1 192.168.1.5
+R1(config)#ip dhcp excluded-address 192.168.1.97 192.168.1.101
+R1(config)#ip dh
+R1(config)#ip dhcp poo
+R1(config)#ip dhcp pool CLIENTS
+R1(dhcp-config)#net
+R1(dhcp-config)#network 192.168.1.0 255.255.255.192
+R1(dhcp-config)#dom
+R1(dhcp-config)#domain-name CCNA-lab.com
+R1(dhcp-config)#def
+R1(dhcp-config)#de
+R1(dhcp-config)#default-router ?
+  A.B.C.D  Router's IP address
+R1(dhcp-config)#default-router 192.168.1.1
+R1(dhcp-config)#?
+  default-router  Default routers
+  dns-server      Set name server
+  domain-name     Domain name
+  exit            Exit from DHCP pool configuration mode
+  network         Network number and mask
+  no              Negate a command or set its defaults
+  option          Raw DHCP options
+R1(dhcp-config)#l
+R1(dhcp-config)#le
+R1(dhcp-config)#exit
+R1(config)#ip
+R1(config)#ip dh
+R1(config)#ip dhcp poo
+R1(config)#ip dhcp pool R2-Clients
+R1(dhcp-config)#net
+R1(dhcp-config)#network 192.168.1.96 255.255.255.240
+R1(dhcp-config)#dom
+R1(dhcp-config)#domain-name CCNA-lab.com
+R1(dhcp-config)#def
+R1(dhcp-config)#default-router 192.168.1.97
+R1(dhcp-config)#lease ?
+% Unrecognized command
+R1(dhcp-config)#do wr mem
+Building configuration...
+[OK]
+R1(dhcp-config)#
+```
+Так же можно задать время аренда для ip адреса например на на 2 дня 12 часов и 30 минут, делается это командой lease 2 12 30.
+Однако в нашем случае данный функцианал в эмуляторе отсутствут:
+```
+R1(dhcp-config)#?
+  default-router  Default routers
+  dns-server      Set name server
+  domain-name     Domain name
+  exit            Exit from DHCP pool configuration mode
+  network         Network number and mask
+  no              Negate a command or set its defaults
+  option          Raw DHCP options
+R1(dhcp-config)#
+```
+
+После чего проверим конфигурацию DHCP:
+
+![](./2.png)
+
+Как видно РС-А получил соответсвующий адрес из пула.
+
+Проверим сетевую связанность на РС-А:
+
+![](./3.png)
+
+Далее необходимо настроить ретрянсляцию DHCP на R2:
+
+![](./4.png)
 
 
 
+```
+R2>
+R2>
+R2>en
+Password: 
+R2#conf  t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#int
+R2(config)#interface gig
+R2(config)#interface gigabitEthernet 0/0/1
+R2(config-if)#ip ?
+  access-group     Specify access control for packets
+  address          Set the IP address of an interface
+  authentication   authentication subcommands
+  flow             NetFlow Related commands
+  hello-interval   Configures IP-EIGRP hello interval
+  helper-address   Specify a destination address for UDP broadcasts
+  inspect          Apply inspect name
+  ips              Create IPS rule
+  mtu              Set IP Maximum Transmission Unit
+  nat              NAT interface commands
+  ospf             OSPF interface commands
+  proxy-arp        Enable proxy ARP
+  split-horizon    Perform split horizon
+  summary-address  Perform address summarization
+R2(config-if)#ip he
+R2(config-if)#ip hel
+R2(config-if)#ip helper-address 10.0.0.1
+R2(config-if)#do sh run
+Building configuration...
+
+Current configuration : 1230 bytes
+!
+version 15.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+security passwords min-length 14
+!
+hostname R2
+!
+!
+!
+enable secret 5 $1$mERr$9cTjUIEqNGurQiFU.ZeCi1
+!
+!
+!
+!
+!
+!
+ip cef
+
+R2(config-if)#
+R2#
+%SYS-5-CONFIG_I: Configured from console by console
+
+R2#do wr mem
+      ^
+% Invalid input detected at '^' marker.
+	
+R2#
+
+```
 
 
 
