@@ -473,9 +473,159 @@ Primary Secondary Type              Ports
 S1#
 ```
 
+Произведем настройку маршрутизатора R2:
+
+```
+R2>
+R2>
+R2>en
+Password: 
+R2#int
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#int
+R2(config)#interface gig
+R2(config)#interface gigabitEthernet 0/0/1
+R2(config-if)#ip add
+R2(config-if)#ip address 192.168.1.97 255.255.255.240
+R2(config-if)#no shu
+R2(config-if)#no shutdown 
+
+R2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up
+
+R2(config-if)#exit
+R2(config)#int
+R2(config)#interface gig
+R2(config)#interface gigabitEthernet 0/0/0
+R2(config-if)#ip add
+R2(config-if)#ip address 10.0.0.2 255.255.255.252
+R2(config-if)#no shu
+R2(config-if)#no shutdown 
+
+R2(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to up
+
+R2(config-if)#exit
+R2(config)#ip rou
+R2(config)#ip ro
+R2(config)#?
+Configure commands:
+  aaa                Authentication, Authorization and Accounting.
+  access-list        Add an access list entry
+  banner             Define a login banner
+  bba-group          Configure BBA Group
+  boot               Modify system boot parameters
+  cdp                Global CDP configuration subcommands
+  class-map          Configure Class Map
+  clock              Configure time-of-day clock
+  config-register    Define the configuration register
+  crypto             Encryption module
+  default            Set a command to its defaults
+  do                 To run exec commands in config mode
+  dot11              IEEE 802.11 config commands
+  enable             Modify enable password parameters
+  end                Exit from configure mode
+  exit               Exit from configure mode
+  flow               Global Flow configuration subcommands
+  hostname           Set system's network name
+  interface          Select an interface to configure
+  ip                 Global IP configuration subcommands
+  ipv6               Global IPv6 configuration commands
+  key                Key management
+  license            Configure license features
+  line               Configure a terminal line
+  lldp               Global LLDP configuration subcommands
+  logging            Modify message logging facilities
+  login              Enable secure login checking
+  mac-address-table  Configure the MAC address table
+  no                 Negate a command or set its defaults
+  ntp                Configure NTP
+  parameter-map      parameter map
+  parser             Configure parser
+  policy-map         Configure QoS Policy Map
+  port-channel       EtherChannel configuration
+  priority-list      Build a priority list
+  privilege          Command privilege parameters
+  queue-list         Build a custom queue list
+  router             Enable a routing process
+  secure             Secure image and configuration archival commands
+  security           Infra Security CLIs
+  service            Modify use of network based services
+  snmp-server        Modify SNMP engine parameters
+  spanning-tree      Spanning Tree Subsystem
+  tacacs-server      Modify TACACS query parameters
+  username           Establish User Name Authentication
+  vpdn               Virtual Private Dialup Network
+  vpdn-group         VPDN group configuration
+  zone               FW with zoning
+  zone-pair          Zone pair command
+R2(config)#ip
+R2(config)#ip 
+R2(config)#ip ?
+  access-list       Named access-list
+  cef               Cisco Express Forwarding
+  default-gateway   Specify default gateway (if not routing IP)
+  default-network   Flags networks as candidates for default routes
+  dhcp              Configure DHCP server and relay parameters
+  domain            IP DNS Resolver
+  domain-lookup     Enable IP Domain Name System hostname translation
+  domain-name       Define the default domain name
+  flow-export       Specify host/port to send flow statistics
+  forward-protocol  Controls forwarding of physical and directed IP broadcasts
+  ftp               FTP configuration commands
+  host              Add an entry to the ip hostname table
+  inspect           Context-based Access Control Engine
+  ips               Intrusion Prevention System
+  local             Specify local options
+  name-server       Specify address of name server to use
+  nat               NAT configuration commands
+  route             Establish static routes
+  routing           Enable IP routing
+  scp               Scp commands
+  ssh               Configure ssh options
+  tcp               Global TCP parameters
+R2(config)#ip rou
+R2(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.1
+R2(config)#do ping 10.0.0.1
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.1, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/0 ms
+
+R2(config)#do wr mem
+Building configuration...
+[OK]
+R2(config)#
+```
 
 
 =================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
