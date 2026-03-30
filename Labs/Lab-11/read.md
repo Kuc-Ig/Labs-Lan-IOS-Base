@@ -216,5 +216,5 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/0 ms
 
 R2#
 ```
-
+![PTK файл enable password: class](./ospf.pkt)
 
