@@ -216,5 +216,51 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 0/0/0 ms
 
 R2#
 ```
+```
+R2#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#int gig
+R2(config)#int gigabitEthernet 0/0/1
+R2(config-if)#
+00:06:40: %OSPF-5-ADJCHG: Process 56, Nbr 1.1.1.1 on GigabitEthernet0/0/1 from FULL to DOWN, Neighbor Down: Dead timer expired
+
+00:06:40: %OSPF-5-ADJCHG: Process 56, Nbr 1.1.1.1 on GigabitEthernet0/0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+
+R2(config-if)#ip ?
+  access-group     Specify access control for packets
+  address          Set the IP address of an interface
+  authentication   authentication subcommands
+  flow             NetFlow Related commands
+  hello-interval   Configures IP-EIGRP hello interval
+  helper-address   Specify a destination address for UDP broadcasts
+  inspect          Apply inspect name
+  ips              Create IPS rule
+  mtu              Set IP Maximum Transmission Unit
+  nat              NAT interface commands
+  ospf             OSPF interface commands
+  proxy-arp        Enable proxy ARP
+  split-horizon    Perform split horizon
+  summary-address  Perform address summarization
+R2(config-if)#ip os
+R2(config-if)#ip ospf ?
+  <1-65535>           Process ID
+  authentication      Enable authentication
+  authentication-key  Authentication password (key)
+  cost                Interface cost
+  dead-interval       Interval after which a neighbor is declared dead
+  hello-interval      Time between HELLO packets
+  message-digest-key  Message digest authentication password (key)
+  network             Network type
+  priority            Router priority
+R2(config-if)#ip ospf de
+R2(config-if)#ip ospf dead-interval 120
+R2(config-if)#do wr mem
+Building configuration...
+[OK]
+R2(config-if)#
+```
+![](./111.png)
+
+
 ![PTK файл enable password: class](./ospf.pkt)
 
