@@ -451,4 +451,4 @@ address         ref clock       st   when     poll    reach  delay          offs
  * sys.peer, # selected, + candidate, - outlyer, x falseticker, ~ configured
 S2#
 ```
-
+![PTK файл enable password: class](./NTP.pkt)
